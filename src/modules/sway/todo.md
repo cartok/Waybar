@@ -1,0 +1,5 @@
+- hinzufügen von format für negative workspace ids
+- numerische sortierung von explizit negativen workspaces -> /(-\d+:)(.*)/, id ist immer -1
+- docs updaten
+- optional: alphabetische sortierung von workspaces die keinen expliziten index haben (nicht mit im name a la (<num>:)<name>, hat dann immer die id -1)
+- dev instructions, package installation -> sudo ln -s /usr/local/lib/libcava.so /usr/lib/libcava.so

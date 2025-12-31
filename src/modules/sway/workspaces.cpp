@@ -5,21 +5,37 @@
 #include <algorithm>
 #include <cctype>
 #include <string>
+// #include <regex>
 
 namespace waybar::modules::sway {
 
 // Helper function to assign a number to a workspace, just like sway. In fact
 // this is taken quite verbatim from `sway/ipc-json.c`.
+// TODO: Should propably change this and use std::from_chars: https://chatgpt.com/c/695525b3-7688-8328-913b-81f0f05d555e
+// - regex lösung, jedoch wäre from_chars performanter aber halt nicht eleganter
+// std::regex num_name_regex(R"(^(?:(-?\d+):)?(.*))");
+//       std::smatch num_name_regex_match;
+//       std::string sway_num;
+//       std::string sway_name;
+//       std::string sway_index;
+//       if (std::regex_match(name, num_name_regex_match, num_name_regex)) {
+//         sway_num = num_name_regex_match.str(1);
+//         sway_name = num_name_regex_match.str(2);
+//       }
 int Workspaces::convertWorkspaceNameToNum(std::string name) {
+  std::cout << "converting ws name to num: " << name << "\n";
   if (isdigit(name[0]) != 0) {
     errno = 0;
     char *endptr = nullptr;
     long long parsed_num = strtoll(name.c_str(), &endptr, 10);
     if (errno != 0 || parsed_num > INT32_MAX || parsed_num < 0 || endptr == name.c_str()) {
+      std::cout << "error case!\n";
       return -1;
     }
+    std::cout << "parsed_num: " << parsed_num << '\n';
     return (int)parsed_num;
   }
+  std::cout << "first char is not a digit (which is wrong for negative values..)\n";
   return -1;
 }
 
